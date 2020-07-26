@@ -93,3 +93,37 @@ function Bird(heightPlay) {
     this.setY(heightPlay / 2)
 }
 
+function Progress() {
+    this.element = createNewElement('span', 'progresso')
+
+    this.updatePoints = points => {
+            this.element.innerHTML = points
+    }
+    this.updatePoints(0)
+}
+
+function FlappyBird() {
+    let points = 0
+
+    const areaPlay = document.querySelector('[wm-flappy]')
+    const height = areaPlay.clientHeight
+    const width = areaPlay.clientWidth
+
+    const progress = new Progress()
+    const barriers = new Barriers(height, width, 200, 400,
+        () => progress.updatePoints(++points) )
+    const bird = new Bird(height)
+
+    areaPlay.appendChild(progress.element)
+    areaPlay.appendChild(bird.element)
+    barriers.pares.forEach(par => areaPlay.appendChild(par.element))
+
+    this.start = () => {
+        const temp = setInterval(() => {
+            barriers.animation()
+            bird.animation()
+        }, 20)
+    }
+}
+//new FlappyBird().start()
+
