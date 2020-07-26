@@ -39,9 +39,6 @@ function PairOfBarriers(height, open, x) {
     this.sortedOpen()
     this.setX(x)
 }
-//const b = new PairOfBarriers(700, 350, 400)
-//document.querySelector('[wm-flappy]').appendChild(b.element)
-
 
 function Barriers(height, width, open, space, points) {
     this.pares = [
@@ -68,9 +65,31 @@ function Barriers(height, width, open, space, points) {
         })
     }
 }
-const barreiras = new Barriers(700, 1100, 400, 400)
-const areaJogo = document.querySelector('[wm-flappy]')
-barreiras.pares.forEach(par => areaJogo.appendChild(par.element))
-//setInterval(() => {
-//    barreiras.animation()
-//}, 2)
+
+function Bird(heightPlay) {
+    let fly = false
+
+    this.element = createNewElement('img', 'passaro')
+    this.element.src = 'imgs/passaro.png'
+
+    this.getY = () => parseInt(this.element.style.bottom.split('px')[0])
+    this.setY = y => this.element.style.bottom = `${y}px`
+
+    window.onkeydown = e => fly = true
+    window.onkeyup = e => fly = false
+
+    this.animation = () => {
+        const newY = this.getY() + (fly ? 8 : -5)
+        const maxHeight = heightPlay - this.element.clientHeight
+
+        if (newY <= 0) {
+            this.setY(0)
+        }else if (newY >= maxHeight) {
+            this.setY(maxHeight)
+        }else {
+            this.setY(newY)
+        }
+    }
+    this.setY(heightPlay / 2)
+}
+
