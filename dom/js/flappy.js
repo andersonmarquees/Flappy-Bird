@@ -39,5 +39,38 @@ function PairOfBarriers(height, open, x) {
     this.sortedOpen()
     this.setX(x)
 }
-const b = new PairOfBarriers(700, 350, 400)
-document.querySelector('[wm-flappy]').appendChild(b.element)
+//const b = new PairOfBarriers(700, 350, 400)
+//document.querySelector('[wm-flappy]').appendChild(b.element)
+
+
+function Barriers(height, width, open, space, points) {
+    this.pares = [
+        new PairOfBarriers(height, open, width),
+        new PairOfBarriers(height, open, width + space),
+        new PairOfBarriers(height, open, width + space * 2),
+        new PairOfBarriers(height, open, width + space * 3)
+    ]
+
+    const move = 3
+
+    this.animation = () => {
+        this.pares.forEach(par => {
+            par.setX(par.getX() - move)
+
+            if(par.getX() < -par.getWidth()) {
+                par.setX(par.getX() + space * this.pares.length)
+                par.sortedOpen()
+            }
+
+            const middle = width / 2
+            const crossedMiddle = par.getX() + move >= middle && par.getX() < middle
+            crossedMiddle && points()
+        })
+    }
+}
+const barreiras = new Barriers(700, 1100, 400, 400)
+const areaJogo = document.querySelector('[wm-flappy]')
+barreiras.pares.forEach(par => areaJogo.appendChild(par.element))
+//setInterval(() => {
+//    barreiras.animation()
+//}, 2)
